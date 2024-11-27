@@ -1,0 +1,2 @@
+/mnt/data1 /dev/sdb1 ext4 defaults
+/mnt/data2 /dev/sdc1 ext4 defaults

@@ -34,6 +34,15 @@ custom_cd() {
     echo "Changed directory to $target_dir"
 }
 
+is_mounted() {
+    local target_dir="$1"
+    if findmnt "$target_dir" >/dev/null 2>&1; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 while true; do
     echo -n "amsh> "
     read command

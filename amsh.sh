@@ -43,6 +43,33 @@ is_mounted() {
     fi
 }
 
+auto_mount() {
+    local target_dir="$1"
+
+    # Detect if `target_dir` is a valid mountpoint
+    if [ ! -d "$target_dir" ]; then
+        echo "Directory not found: $target_dir"
+        return 1
+    fi
+
+    # Check if the target is already mounted
+    if is_mounted "$target_dir"; then
+        echo "$target_dir is already mounted."
+        return 0
+    fi
+
+    # Try to mount the device
+    echo "Attempting to mount $target_dir..."
+    sudo mount "$target_dir"
+    if [ $? -eq 0 ]; then
+        echo "Mounted $target_dir successfully."
+        return 0
+    else
+        echo "Failed to mount $target_dir."
+        return 1
+    fi
+}
+
 while true; do
     echo -n "amsh> "
     read command

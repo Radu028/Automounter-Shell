@@ -57,11 +57,23 @@ auto_mount() {
 }
 
 while true; do
+    # Show the prompt
     echo -n "amsh> "
-    read command
-    if [ "$command" = "exit" ]; then
+
+    # Read the command and arguments
+    read command args
+
+    # Check the entered command
+    case "$command" in
+    cd) # For cmd `cd`
+        custom_cd "$args"
+        ;;
+    exit) # For cmd `exit`
         echo "Exiting amsh..."
         break
-    fi
-    sh -c "$command"
+        ;;
+    *) # For other commands
+        sh -c "$command"
+        ;;
+    esac
 done

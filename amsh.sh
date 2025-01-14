@@ -3,7 +3,7 @@
 ###############################################################################
 # Global configuration
 ###############################################################################
-CONFIG_FILE="./amsh_fstab.conf"
+CONFIG_FILE="./config/amsh_fstab.conf"
 
 # Associative array to track mount times. Key = mountpoint, Value = timestamp
 declare -A MOUNT_TIMES

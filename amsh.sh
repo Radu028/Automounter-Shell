@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONFIG_FILE="./amsh_fstab.conf"
+CONFIG_FILE="./config/amsh_fstab.conf"
 
 # Associative array mapping mountpoint -> "source fs_type lifetime"
 declare -A MOUNT_INFO
@@ -11,7 +11,7 @@ declare -A MOUNT_TIMES
 # 1. Read the config file and populate MOUNT_INFO
 ###############################################################################
 while read -r line; do
-    # Skip empty lines or comment lines
+    # Sar peste liniile goale și comentarii
     [[ -z "$line" ]] && continue
     [[ "$line" =~ ^[[:space:]]*# ]] && continue
 
@@ -21,7 +21,7 @@ while read -r line; do
     lifetime=$(echo "$line" | awk '{print $4}')
 
     MOUNT_INFO["$mp"]="$src_fs $fs_type $lifetime"
-done < "$CONFIG_FILE"
+done < <(/bin/grep -v '^[[:space:]]*#' "$CONFIG_FILE" 2>/dev/null)
 
 ###############################################################################
 # 2. Detect if a path corresponds to a configured mountpoint

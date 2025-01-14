@@ -11,7 +11,7 @@ declare -A MOUNT_TIMES
 # 1. Read the config file and populate MOUNT_INFO
 ###############################################################################
 while read -r line; do
-    # Sar peste liniile goale și comentarii
+    # Skip empty lines and comments
     [[ -z "$line" ]] && continue
     [[ "$line" =~ ^[[:space:]]*# ]] && continue
 

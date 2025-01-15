@@ -7,9 +7,7 @@ declare -A MOUNT_INFO
 # Associative array mapping mountpoint -> timestamp (mount or last access time)
 declare -A MOUNT_TIMES
 
-###############################################################################
 # 1. Read the config file and populate MOUNT_INFO
-###############################################################################
 while read -r line; do
     # Skip empty lines and comments
     [[ -z "$line" ]] && continue
@@ -23,9 +21,7 @@ while read -r line; do
     MOUNT_INFO["$mp"]="$src_fs $fs_type $lifetime"
 done < <(/bin/grep -v '^[[:space:]]*#' "$CONFIG_FILE" 2>/dev/null)
 
-###############################################################################
 # 2. Detect if a path corresponds to a configured mountpoint
-###############################################################################
 function detect_mountpoint_in_path() {
     local path="$1"
     # Convert relative paths to absolute
@@ -42,17 +38,13 @@ function detect_mountpoint_in_path() {
     done
 }
 
-###############################################################################
 # 3. Check if a given mountpoint is already mounted
-###############################################################################
 function is_mounted() {
     local mp="$1"
     mount | grep -q " on $mp "
 }
 
-###############################################################################
 # 4. Ensure a mountpoint is mounted; update timestamp
-###############################################################################
 function ensure_mounted() {
     local mp="$1"
     local info="${MOUNT_INFO["$mp"]}"
@@ -69,19 +61,15 @@ function ensure_mounted() {
     MOUNT_TIMES["$mp"]=$(date +%s)
 }
 
-###############################################################################
 # 5. Check if a mountpoint is in use (processes have files open there)
-###############################################################################
 function mountpoint_in_use() {
     local mp="$1"
     lsof +D "$mp" &>/dev/null
     [[ $? -eq 0 ]] && return 0 || return 1
 }
 
-###############################################################################
 # 6. After each command, check if any mountpoints have exceeded their lifetime
 #    and, if not in use, unmount them
-###############################################################################
 function check_unmounts() {
     local now=$(date +%s)
 
@@ -103,9 +91,7 @@ function check_unmounts() {
     done
 }
 
-###############################################################################
 # 7. Internal "cd" command
-###############################################################################
 function amsh_cd() {
     local dest="$1"
     [[ -z "$dest" ]] && dest="$HOME"  # If no argument, go to HOME
@@ -125,10 +111,8 @@ function amsh_cd() {
     fi
 }
 
-###############################################################################
 # 8. Execute an external command:
 #    - For each argument that might be a path, ensure mount is done
-###############################################################################
 function amsh_exec() {
     local args=("$@")
     
@@ -151,9 +135,7 @@ function amsh_exec() {
     /bin/sh -c "${joined_cmd}"
 }
 
-###############################################################################
 # 9. Main loop: show prompt, read commands, execute them
-###############################################################################
 function main_loop() {
     while true; do
         echo -n "amsh> "
